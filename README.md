@@ -1,12 +1,12 @@
 # IANGPT
 
-> **I**ntelligent **A**ssistant **N**avigator – A production-ready AI chat application powered by OpenRouter reasoning models.
+> **I**ntelligent **A**ssistant **N**avigator – A local UI AI chat application powered by OpenRouter reasoning models.
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![Flask](https://img.shields.io/badge/Flask-2.3+-green.svg)](https://flask.palletsprojects.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-IANGPT is a robust, modular web application built with Python and Flask that serves as a sophisticated interface for interacting with large language models. Designed with production-level architecture, it features persistent database-backed chat sessions, seamless contextual messaging, and intelligent model reasoning extraction. The application allows users to edit previous messages, branch conversations, and maintain context effortlessly.
+IANGPT is a robust, modular local web application built with Python and Flask that serves as a sophisticated interface for interacting with large language models. Designed specifically to run as a local UI, it features persistent database-backed chat sessions, seamless contextual messaging, and intelligent model reasoning extraction. The application allows users to edit previous messages, branch conversations, and maintain context effortlessly right on your local machine.
 
 ## ✨ Features
 
