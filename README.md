@@ -53,27 +53,25 @@ The backend adheres to a RESTful architecture, utilizing JSON payloads for seaml
 
 ## 🚀 Installation Instructions
 
-### Prerequisites
-- Python 3.8 or higher installed.
+### Windows (Recommended / One-Click)
+Simply double-click **`run.bat`** (or **`start.bat`**). This script will automatically:
+- Create a virtual environment for you.
+- Install all necessary dependencies.
+- Guide you through setting up your API key.
+- Launch the Desktop GUI application.
 
-### Step-by-Step Guide
-
+### Manual Setup
 1. **Clone the Repository**
    ```bash
    git clone https://github.com/yourusername/IANGPT.git
    cd IANGPT
    ```
 
-2. **Set Up a Virtual Environment (Recommended)**
-   Isolate project dependencies by setting up a local virtual environment:
+2. **Set Up a Virtual Environment**
    ```bash
    python -m venv venv
-   
-   # On Windows:
-   venv\Scripts\activate
-   
-   # On macOS/Linux:
-   source venv/bin/activate
+   source venv/bin/activate  # On macOS/Linux
+   # On Windows: venv\Scripts\activate
    ```
 
 3. **Install Dependencies**
@@ -82,36 +80,47 @@ The backend adheres to a RESTful architecture, utilizing JSON payloads for seaml
    ```
 
 4. **Configure Environment Variables**
-   Duplicate the example environment block to create your active configuration.
+   Create a `.env` file from the example:
    ```bash
-   cp .env.example .env
+   cp .env.example .env  # Or copy manually on Windows
    ```
 
 ## ⚙️ Environment Variable Setup
 
-Open the `.env` file in your preferred text editor and configure the necessary parameters. By default, IANGPT interfaces with OpenRouter.
+Open the `.env` file and add your OpenRouter API key:
 
 ```env
 OPENROUTER_API_KEY=your_openrouter_api_key_here
-MODEL_NAME=openai/gpt-oss-120b:free
+MODEL_NAME=openai/gpt-4o-2024-05-13  # Optional: change your model
 ```
-*(Note: Replace `your_openrouter_api_key_here` with your actual key. You can swap `MODEL_NAME` for any valid model ID supported by the OpenRouter ecosystem.)*
 
 ## 💻 How to Run Locally
 
-### Web Application (Recommended)
-Launch the Flask development server to run the primary web user-interface:
+### Desktop GUI (Recommended)
+Launch the standalone desktop window:
 ```bash
-# On Windows, simply double-click run.bat, or execute:
+python gui.py
+```
+*(On Windows, you can just use `run.bat`)*
+
+### Web Application
+Launch the Flask server to use in your browser:
+```bash
 python app.py
 ```
-Once the server is initialized, open your web browser and navigate to `http://127.0.0.1:5000`.
+Then navigate to `http://127.0.0.1:5000`.
 
 ### Command Line Interface (CLI)
-If you prefer rapidly testing the model's responses directly from your terminal:
 ```bash
 python main.py
 ```
+
+## 🛠 Troubleshooting (Windows GUI)
+If you see an error about **"Failed building wheel for pythonnet"** or a **"GUI Error"** when launching:
+1. You need the **Visual Studio Build Tools** installed on your machine.
+2. Download them here: [Visual Studio Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/)
+3. Select the **"Desktop development with C++"** workload during installation.
+4. This is required because the Windows GUI uses .NET to provide a modern Edge/Chrome experience.
 
 ## 🔮 Future Improvements
 

@@ -3,3 +3,4 @@ python-dotenv
 rich
 flask
 pywebview
+pythonnet>=3.0.3
