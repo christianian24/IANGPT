@@ -1,91 +1,114 @@
-# 🏛️ The Pillars of Object-Oriented Programming (OOP)
+# 🏛️ The Pillars of Object-Oriented Programming (OOP) in IANGPT
 
-Object-Oriented Programming (OOP) is a programming paradigm based on the concept of "objects," which can contain data (fields/attributes) and code (methods/functions). While there are often four core principles discussed, many developers focus on these **three fundamental pillars** that form the backbone of modern software design.
+This project is built using Object-Oriented Programming (OOP) principles to ensure the code is modular, reusable, and easy to maintain. Below are the four core pillars of OOP as they are implemented in this repository.
 
 ---
 
 ## 1. 📦 Encapsulation
 **"Keep it private, keep it safe."**
 
-Encapsulation is the practice of bundling data and the methods that operate on that data into a single unit (a class). It also involves **restricting direct access** to some of an object's components, which is a means of preventing accidental interference and misuse of the data.
+Encapsulation bundles data (attributes) and the methods that operate on that data into a single unit (a class). It hides the internal state from the outside world, providing a clean interface.
 
-### Key Benefits:
-- **Data Hiding:** Protecting the internal state of an object.
-- **Control:** You decide how the data is accessed or modified (using getters and setters).
-- **Flexibility:** You can change the internal implementation without affecting the code that uses the object.
+### 🔍 Project Example:
+In `core/chat.py`, the `BaseChatSession` class encapsulates everything needed for a chat conversation.
 
 ```python
-class BankAccount:
-    def __init__(self, balance):
-        self.__balance = balance  # Private attribute
-
-    def deposit(self, amount):
-        if amount > 0:
-            self.__balance += amount
-            print(f"Deposited: {amount}")
-
-    def get_balance(self):
-        return self.__balance
+class BaseChatSession(ABC):
+    def __init__(self, session_id: str = None):
+        self.client = get_client()
+        self.messages: List[Dict[str, Any]] = [{"role": "system", "content": SYSTEM_PROMPT}]
+        self.model = MODEL_NAME
+        self.session_id = session_id
 ```
+
+**Why it matters:**
+Instead of having global variables for messages or the AI client, they are "encapsulated" inside the session object. This allows us to have multiple independent chat sessions running at once without them interfering with each other.
+
+📍 **Location:** [core/chat.py:L7-22](file:///c:/code_vs/IANGPT/IANGPT/core/chat.py#L7-L22)
 
 ---
 
 ## 2. 🌳 Inheritance
 **"Don't reinvent the wheel."**
 
-Inheritance allows a class (child/subclass) to acquire the properties and behaviors of another class (parent/superclass). It promotes **code reusability** and establishes a natural hierarchy between objects.
+Inheritance allows a class (child) to acquire the properties and behaviors of another class (parent). This promotes code reusability.
 
-### Key Benefits:
-- **Reusability:** Use existing code to create new classes.
-- **Organization:** Create a logical "is-a" relationship (e.g., a `Dog` **is a** `Animal`).
-- **Maintainability:** Fix a bug in the parent class, and it's fixed in all children.
+### 🔍 Project Example:
+We use a base class for all chats, then specialized versions for different model types.
 
 ```python
-class Animal:
-    def speak(self):
-        print("Animal makes a sound")
+# Parent Class
+class BaseChatSession(ABC): ...
 
-class Dog(Animal):  # Dog inherits from Animal
-    def speak(self):
-        print("Woof! Woof!")
-
-my_dog = Dog()
-my_dog.speak()  # Output: Woof! Woof!
+# Child Classes (Inherit from BaseChatSession)
+class StandardChatSession(BaseChatSession): ...
+class ReasoningChatSession(BaseChatSession): ...
 ```
+
+**Why it matters:**
+Both `StandardChatSession` and `ReasoningChatSession` automatically get the `__init__` logic and the `_generate_title_if_needed` method from the parent. We only write the code once!
+
+📍 **Locations:**
+- Parent: [core/chat.py:L7](file:///c:/code_vs/IANGPT/IANGPT/core/chat.py#L7)
+- Child 1: [core/chat.py:L52](file:///c:/code_vs/IANGPT/IANGPT/core/chat.py#L52)
+- Child 2: [core/chat.py:L94](file:///c:/code_vs/IANGPT/IANGPT/core/chat.py#L94)
 
 ---
 
 ## 3. 🎭 Polymorphism
 **"One interface, many forms."**
 
-Polymorphism allows objects of different classes to be treated as objects of a common superclass. The most common form is when a child class overrides a method of its parent. It allows one function to behave differently based on the object it is acting upon.
+Polymorphism allows different classes to be treated as if they were the same type through a shared interface. Usually, this involves overriding methods.
 
-### Key Benefits:
-- **Flexibility:** Write code that can work with different types of objects.
-- **Interchangeability:** Swap out implementations without changing the calling code.
-- **Simplicity:** Reduces the need for complex conditional logic (if/else).
+### 🔍 Project Example:
+Both chat session types have a `send_message` method, but they behave differently.
 
 ```python
-animals = [Dog(), Animal()]
+# In StandardChatSession:
+def send_message(self, content: str):
+    # Standard logic for normal models
 
-for animal in animals:
-    animal.speak() 
-    # The same call produces different results!
+# In ReasoningChatSession:
+def send_message(self, content: str):
+    # Specialized logic to handle reasoning/thoughts
 ```
 
+**Why it matters:**
+In `app.py`, we can simply call `session.send_message(user_input)` without needing to know *which* type of session it is. The object "knows" how to handle itself.
+
+📍 **Locations:**
+- Standard: [core/chat.py:L54](file:///c:/code_vs/IANGPT/IANGPT/core/chat.py#L54)
+- Reasoning: [core/chat.py:L96](file:///c:/code_vs/IANGPT/IANGPT/core/chat.py#L96)
+
 ---
 
-> [!NOTE]
-> ### 💡 What about Abstraction?
-> Although often cited as the **4th Pillar**, Abstraction is frequently grouped with Encapsulation. Abstraction focuses on **hiding the complexity** and only showing the essential features of an object. It's the concept of "what it does" versus "how it does it."
+## 💡 4. Abstraction
+**"Hide the complexity, show the essentials."**
+
+Abstraction focuses on *what* an object does rather than *how* it does it. We use Abstract Base Classes (ABC) to define a contract.
+
+### 🔍 Project Example:
+The `BaseChatSession` is an "Abstract" class. You cannot create a `BaseChatSession` directly; you must use one of its concrete implementations.
+
+```python
+@abstractmethod
+def send_message(self, content: str) -> Any:
+    pass
+```
+
+**Why it matters:**
+It forces any new type of chat session we create in the future to implement `send_message`. It defines the "rules" of what a chat session must be able to do, while hiding the complex API calls inside the methods.
+
+📍 **Location:** [core/chat.py:L43-49](file:///c:/code_vs/IANGPT/IANGPT/core/chat.py#L43-L49)
 
 ---
 
-### 🚀 Summary
-| Pillar | Purpose | Keyword |
+### 🚀 Quick Summary
+| Pillar | Purpose | Real-World Match |
 | :--- | :--- | :--- |
-| **Encapsulation** | Security & Organization | *Private* |
-| **Inheritance** | Code Reusability | *Hierarchy* |
-| **Polymorphism** | Flexibility | *Override* |
+| **Encapsulation** | Data Security | `self.messages` inside the class |
+| **Inheritance** | Reusability | `ReasoningChatSession` inheriting logic |
+| **Polymorphism** | Flexibility | Multiple versions of `send_message` |
+| **Abstraction** | Simplicity | `@abstractmethod` defining the contract |
 
 Happy Coding! 💻✨
